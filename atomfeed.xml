@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title>John Haldeman's Blog</title>
+  <link href="http://johnhaldeman.ca/blog"/>
+  <updated>2020-05-26 12:00:00Z</updated>
+  <author>
+    <name>John Haldeman</name>
+  </author>
+  <id>http://johnhaldeman.ca</id>
+
+  <entry>
+    <title>Working Remote in Windsor, ON</title>
+    <link href="http://johnhaldeman.ca/posts/remote-in-windsor"/>
+    <id>http://johnhaldeman.ca/posts/remote-in-windsor</id>
+    <updated>2020-05-26 12:00:00Z</updated>
+    <summary> The COVID-19 pandemic has turned many people into remote workers – perhaps permanently. If your job has changed to allow you to work remotely, or you are currently a remote worker, this post is for you. Being able to live anywhere has many advantages. I’ll contend that you should pick Windsor, Ontario as your home base. After all, I did nine years ago when I first became a remote worker, and I have no intention of leaving. I came for the cost of living reductions, I stayed because it's a great city in a great area.</summary>
+    <author>
+        <name>John Haldeman</name>
+    </author>
+  </entry>
+
+</feed>
+
