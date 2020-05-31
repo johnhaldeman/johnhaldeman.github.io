@@ -1,43 +1,334 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+<head>
+    <meta charset="UTF-8" />
+    <title>Beast's Adventure</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+<body>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+    <script type="text/javascript">
+
+        class EndScene extends Phaser.Scene {
+            constructor() {
+                super('EndScene');
+            }
+
+            preload() {
+                this.load.image('endscenebackground', 'assets/EndScene.png');
+                this.load.image('starbox', 'assets/starbox.png');
+                this.load.image('playagainbutton', 'assets/playagainbutton.png');
+                this.load.image('star1', 'assets/star1.png');
+                this.load.image('star2', 'assets/star2.png');
+                this.load.image('star3', 'assets/star3.png');
+                this.load.audio("endsound", ["assets/GusEnding.mp3"]);
+            }
+
+            create() {
+                let bg = this.add.image(800, 450, 'endscenebackground');
+                let starbox = this.add.image(800, 350, 'starbox');
+                if (score >= 70) {
+                    let star1 = this.add.image(710, 290, 'star1');
+                }
+                if (score >= 130) {
+                    let star2 = this.add.image(780, 370, 'star2');
+                }
+                if (score >= 180) {
+                    let star3 = this.add.image(875, 310, 'star3');
+                }
+                let playagainbutton = this.add.image(800, 110, 'playagainbutton');
+                playagainbutton.setInteractive();
+
+                this.input.on('gameobjectdown', () => {
+                    location.reload()
+                });
+
+                
+                this.sound.play("endsound")
+            }
+
+            update() {
+            }
+        }
+
+        class BelleScene extends Phaser.Scene {
+
+            rotationData = {
+                rotating: false,
+                rotation: 0
+            }
+
+            doorknob = "";
+            played = false;
+
+            constructor() {
+                super('BelleScene');
+            }
+
+            preload() {
+                this.load.image('background', 'assets/BelleScene.png');
+                this.load.image('doorknob', 'assets/doorknobsprite.png');
+                this.load.image('door', 'assets/door.png');
+                this.load.image('belle', 'assets/Belle.png');
+                this.load.audio("doorsound", ["assets/RosieKitty.mp3"]);
+            }
+
+
+            onObjectClicked(data) {
+                data.rotating = true;
+            }
+
+            letGo(data) {
+                data.rotating = false;
+            }
+
+            create() {
+
+                this.door = this.add.quad(800, 450, 'door');
+                let sky = this.add.image(800, 450, 'background');
+                this.belle = this.add.image(875, 550, 'belle');
+                this.doorknob = this.add.image(700, 400, 'doorknob');
+                this.doorknob.setInteractive();
+
+                this.input.on('gameobjectdown', () => this.onObjectClicked(this.rotationData));
+                this.input.on('pointerup', () => this.letGo(this.rotationData));
+            }
+
+            update() {
+                if (this.rotationData.rotating) {
+                    this.rotationData.rotation = this.rotationData.rotation + 1;
+                    this.doorknob.rotation += 0.1;
+                }
+                if (this.rotationData.rotation >= 120) {
+                    if(!this.played){
+                        this.sound.play("doorsound")
+                        this.played = true;
+                    }
+                    this.doorknob.visible = false;
+                    this.door.topLeftX = this.door.topLeftX + 5;
+                    this.door.bottomLeftX = this.door.bottomLeftX + 5;
+
+                    if (this.door.topRightX - this.door.topLeftX <= 20) {
+                        this.scene.start('EndScene')
+                    }
+
+                }
+
+
+            }
+        }
+
+        function collectStar(player, star) {
+            star.disableBody(true, true);
+            this.sound.play("gemsound")
+
+            //  Add and update the score
+            score += 10;
+            scoreText.setText('Score: ' + score);
+
+        }
+
+        class BeastScene extends Phaser.Scene {
+            constructor() {
+                super("BeastScene")
+            }
+
+            loadBelle = false;
+
+            preload() {
+                this.load.image('sky', 'assets/sky.png');
+                this.load.image('platform', 'assets/platform.png');
+                this.load.image('grass', 'assets/grass.png');
+                this.load.image('greengem', 'assets/greengem.png');
+                this.load.image('redgem', 'assets/redgem.png');
+                this.load.image('rock', 'assets/wholerock.png');
+                this.load.image('finish', 'assets/finish.png');
+                this.load.image('rainbow', 'assets/rainbow.png');
+                this.load.spritesheet('dude', 'assets/BeastSprite.png', { frameWidth: 1316 / 9, frameHeight: 188 });
+                //this.load.audio("jumpsound", ["assets/GusBeastJump.mp3"]);
+                this.load.audio("gemsound", ["assets/GusCollectGem.mp3"]);
+                this.load.audio("jumpsound", ["assets/RosieBeastJump.mp3"]);
+                //this.load.audio("gemsound", ["assets/RosieCollectGem.mp3"]);
+                //this.load.audio("music", ["assets/RosieBeastMusic.mp3"]);
+            }
+
+            create() {
+                const beaststart = 100;
+
+                const addGemPlatform = (x, y, platforms, gemname, player, collectStar) => {
+                    let platform = platforms.create(x, y, 'platform');
+                    platform.scaleX = 0.5;
+                    platform.refreshBody();
+
+                    let gems = this.physics.add.group({
+                        key: gemname,
+                        repeat: 2,
+                        setXY: { x: x - 100, y: y - 100, stepX: 95 }
+                    });
+
+
+                    this.physics.add.collider(gems, platforms);
+                    this.physics.add.overlap(player, gems, collectStar, null, this);
+                }
+
+                //  A simple background for our game
+                let sky = this.add.image(400, 1300, 'sky');
+                sky.scaleX = 10;
+                sky.scaleY = 2;
+                this.physics.world.setBounds(0, 0, 4000, 2000);
+                this.cameras.main.setBounds(0, 1000, 4000, 900);
+
+                let rainbox = this.add.image(3200, 1500, "rainbow");
+
+
+                //  The platforms group contains the ground and the 2 ledges we can jump on
+                this.platforms = this.physics.add.staticGroup();
+
+                //  Here we create the ground.
+                let ground = this.add.tileSprite(0, 1880, 2000 * 4, 60 / 2, "grass");
+                ground.tileScaleX = 0.5
+                ground.tileScaleY = 0.5
+                this.platforms.add(ground);
+
+                // The player and its settings
+                this.player = this.physics.add.sprite(beaststart, 1450, 'dude');
+                this.player.debugShowBody = true;
+                this.player.setCollideWorldBounds(true);
+                //  this.playe physics properties. Give the little guy a slight bounce.
+                this.player.setBounce(0.2);
+
+
+                //  Our player animations, turning, walking left and walking right.
+                this.anims.create({
+                    key: 'left',
+                    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+                    frameRate: 10,
+                    repeat: -1
+                });
+
+                this.anims.create({
+                    key: 'turn',
+                    frames: [{ key: 'dude', frame: 4 }],
+                    frameRate: 20
+                });
+
+                this.anims.create({
+                    key: 'right',
+                    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+                    frameRate: 10,
+                    repeat: -1
+                });
+
+                //  Input Events
+                cursors = this.input.keyboard.createCursorKeys();
+
+                //  The score
+                scoreText = this.add.text(16, 1016, 'Score: 0', { fontSize: '32px', fill: '#444', fontFamily: "Comic Sans MS" });
+                scoreText.scrollFactorX = 0;
+
+                this.physics.add.collider(this.player, this.platforms);
+
+                addGemPlatform(1450, 1600, this.platforms, "redgem", this.player, collectStar);
+                addGemPlatform(750, 1600,  this.platforms, "redgem", this.player, collectStar);
+                addGemPlatform(1100, 1300, this.platforms, "greengem", this.player, collectStar);
+                addGemPlatform(1800, 1300, this.platforms, "greengem", this.player, collectStar);
+                addGemPlatform(2500, 1300, this.platforms, "redgem", this.player, collectStar);
+                addGemPlatform(3200, 1300, this.platforms, "greengem", this.player, collectStar);
+
+
+                // Create a Rock
+                let rocks = this.physics.add.staticGroup();
+                let rock = rocks.create(4000, 1900, 'rock');
+                rock.body.setCircle(300);
+                rock.refreshBody();
+
+                let finish = this.physics.add.sprite(3925, 1200, 'finish');
+                finish.scaleX = 0.75;
+                finish.scaleY = 0.75;
+
+                this.physics.add.collider(this.player, rocks);
+                //this.physics.add.collider(this.player, finish);
+                this.physics.add.collider(finish, rocks);
+                this.physics.add.collider(finish, this.platforms);
+
+                this.physics.add.overlap(this.player, finish, d => { this.loadBelle = true }, null, this);
+
+                this.cameras.main.startFollow(this.player);
+
+                //this.sound.play("music", {loop: true, volume: 0.75})
+                
+            }
+
+            update() {
+
+                if (cursors.left.isDown) {
+                    this.player.setVelocityX(-500);
+
+                    this.player.anims.play('left', true);
+                }
+                else if (cursors.right.isDown) {
+                    this.player.setVelocityX(500);
+
+                    this.player.anims.play('right', true);
+                }
+                else {
+                    this.player.setVelocityX(0);
+
+                    this.player.anims.play('turn');
+                }
+
+                if (cursors.up.isDown && this.player.body.touching.down) {
+                    this.player.setVelocityY(-650);
+                    this.sound.play("jumpsound")
+                }
+
+                if (this.loadBelle) {
+                    this.scene.start('BelleScene');
+                }
+
+
+            }
+
+        }
+
+        var config = {
+            type: Phaser.AUTO,
+            width: 1600,
+            height: 900,
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 600 },
+                    debug: false
+                }
+            },
+            scene: [
+                BeastScene,
+                BelleScene,
+                EndScene
+            ],
+            audio: {
+                disableWebAudio: false
+            }
+        };
+
+        var cursors;
+        var score = 0;
+        var scoreText;
+
+        var game = new Phaser.Game(config);
+
+
+
+    </script>
+
+</body>
+
 </html>
