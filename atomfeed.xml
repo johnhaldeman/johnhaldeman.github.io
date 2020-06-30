@@ -10,12 +10,15 @@
   </author>
   <id>https://johnhaldeman.ca/</id>
 
+
   <entry>
-    <title>Working Remote in Windsor, ON</title>
-    <link href="https://johnhaldeman.ca/posts/remote-in-windsor"/>
-    <id>https://johnhaldeman.ca/posts/remote-in-windsor</id>
-    <updated>2020-05-26T12:00:00Z</updated>
-    <summary> The COVID-19 pandemic has turned many people into remote workers – perhaps permanently. If your job has changed to allow you to work remotely, or you are currently a remote worker, this post is for you. Being able to live anywhere has many advantages. I’ll contend that you should pick Windsor, Ontario as your home base. After all, I did nine years ago when I first became a remote worker, and I have no intention of leaving. I came for the cost of living reductions, I stayed because it's a great city in a great area.</summary>
+    <title>An Experimental Reading Game using Speech Recognition</title>
+    <link href="https://johnhaldeman.ca/posts/ready-uppy"/>
+    <id>https://johnhaldeman.ca/posts/ready-uppy</id>
+    <updated>2020-06-30T12:00:00Z</updated>
+    <summary> Seeing if online reading games could be improved by using 
+      speech recognition.
+    </summary>
     <author>
         <name>John Haldeman</name>
     </author>
@@ -32,6 +35,18 @@
         <name>John Haldeman</name>
     </author>
   </entry>
+
+  <entry>
+    <title>Working Remote in Windsor, ON</title>
+    <link href="https://johnhaldeman.ca/posts/remote-in-windsor"/>
+    <id>https://johnhaldeman.ca/posts/remote-in-windsor</id>
+    <updated>2020-05-26T12:00:00Z</updated>
+    <summary> The COVID-19 pandemic has turned many people into remote workers – perhaps permanently. If your job has changed to allow you to work remotely, or you are currently a remote worker, this post is for you. Being able to live anywhere has many advantages. I’ll contend that you should pick Windsor, Ontario as your home base. After all, I did nine years ago when I first became a remote worker, and I have no intention of leaving. I came for the cost of living reductions, I stayed because it's a great city in a great area.</summary>
+    <author>
+        <name>John Haldeman</name>
+    </author>
+  </entry>
+
 
 </feed>
 
